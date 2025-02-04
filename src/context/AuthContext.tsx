@@ -56,9 +56,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     );
 
     if (index !== -1) {
-      // Update the corresponding data point
+      
       const newData = [...chartData];
-      newData[index] += 1; // Increment the interaction count
+      newData[index] += 1; 
       setChartData(newData);
     }
   };
