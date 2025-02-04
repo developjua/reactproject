@@ -19,7 +19,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
 
-  // Initialize chart data and labels for Counter, Editor, and Form
+ 
   const [chartData, setChartData] = useState<number[]>([0, 0, 0]);
   const [chartLabels, setChartLabels] = useState<string[]>([
     "Counter",
