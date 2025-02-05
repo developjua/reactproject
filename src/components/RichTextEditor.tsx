@@ -1,42 +1,49 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; // Import Quill styles
-import { Container, Box, Typography, Button } from "@mui/material";
+import "react-quill/dist/quill.snow.css";
+import { Container, Box, Typography, Button, Snackbar } from "@mui/material";
 import { useAuth } from "../context/AuthContext";
 
 const RichTextEditor: React.FC = () => {
-
   const [content, setContent] = useState<string>("");
-  const { hasUnsavedChanges, setHasUnsavedChanges, updateChartData } = useAuth();
-
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+  const { hasUnsavedChanges, setHasUnsavedChanges, updateChartData } =
+    useAuth();
+  const quillRef = useRef<ReactQuill | null>(null);
 
   useEffect(() => {
-    const savedContent = localStorage.getItem("richTextContent");
-    if (savedContent) {
-      setContent(savedContent);
+    if (typeof window !== "undefined" && window.localStorage) {
+      const savedContent = localStorage.getItem("richTextContent");
+      if (savedContent) {
+        setContent(savedContent);
+      }
     }
   }, []);
 
- 
   const handleChange = (value: string) => {
     setContent(value);
     setHasUnsavedChanges(true);
-    
   };
 
- 
   const handleSave = () => {
-    localStorage.setItem("richTextContent", content);
-    alert("Content saved successfully!");
-    setHasUnsavedChanges(false);
-    updateChartData("editor");
+    if (typeof window !== "undefined" && window.localStorage) {
+      localStorage.setItem("richTextContent", content);
+      setOpenSnackbar(true); // Show Snackbar when content is saved
+      setHasUnsavedChanges(false);
+      updateChartData("editor");
+    }
   };
 
-  
   const handleClear = () => {
     setContent("");
-    localStorage.removeItem("richTextContent");
-    alert("Content cleared!");
+    if (typeof window !== "undefined" && window.localStorage) {
+      localStorage.removeItem("richTextContent");
+    }
+    setOpenSnackbar(true); // Show Snackbar when content is cleared
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   return (
@@ -46,16 +53,17 @@ const RichTextEditor: React.FC = () => {
           Rich Text Editor
         </Typography>
         <ReactQuill
-          theme="snow" 
+          theme="snow"
           value={content}
           onChange={handleChange}
+          ref={quillRef}
           modules={{
             toolbar: [
-              [{ header: [1, 2, 3, false] }], 
-              ["bold", "italic", "underline", "strike"], 
-              [{ list: "ordered" }, { list: "bullet" }], 
-              ["link", "image"], 
-              ["clean"], 
+              [{ header: [1, 2, 3] }],
+              ["bold", "italic", "underline", "strike"],
+              [{ list: "ordered" }, { list: "bullet" }],
+              ["link", "image"],
+              ["clean"],
             ],
           }}
           formats={[
@@ -79,6 +87,7 @@ const RichTextEditor: React.FC = () => {
             ".ql-editor": {
               minHeight: "500px",
               fontSize: "16px",
+              padding: "16px",
             },
           }}
         />
@@ -102,9 +111,18 @@ const RichTextEditor: React.FC = () => {
             Clear
           </Button>
         </Box>
+
+        
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackbar}
+          message={content ? "Content saved!" : "Content cleared!"}
+        />
       </Box>
     </Container>
   );
 };
 
 export default RichTextEditor;
+

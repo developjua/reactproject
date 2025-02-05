@@ -8,6 +8,7 @@ import {
   Typography,
   Box,
   Alert,
+  Link,
 } from "@mui/material";
 
 const Signup: React.FC = () => {
@@ -25,9 +26,9 @@ const Signup: React.FC = () => {
     }
 
     try {
-      signup(username, password); // Call the signup method
+      signup(username, password); 
       setSuccess(true);
-      setTimeout(() => navigate("/login"), 2000); // Redirect to login after 2 seconds
+      setTimeout(() => navigate("/login"), 2000); 
     } catch (err) {
       setError("Failed to create an account");
     }
