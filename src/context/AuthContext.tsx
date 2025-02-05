@@ -4,6 +4,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (username: string, password: string) => void;
   logout: () => void;
+  signup: (username: string, password: string) => void; // Add signup method
   hasUnsavedChanges: boolean;
   setHasUnsavedChanges: (value: boolean) => void;
   chartData: number[];
@@ -18,8 +19,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
-
- 
   const [chartData, setChartData] = useState<number[]>([0, 0, 0]);
   const [chartLabels, setChartLabels] = useState<string[]>([
     "Counter",
@@ -27,22 +26,39 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     "Form",
   ]);
 
-  const login = (usernames: string, passwords: string) => {
-    const details = localStorage.getItem("userdetails");
-        if(details==null){
-          alert("Please signup");
-        }
-        console.log(details)
-        const {username,password} =JSON.parse( details)
-        console.log(username,password);
+  const signup = (username: string, password: string) => {
+    const existingUser = localStorage.getItem("userdetails");
+    if (existingUser) {
+      const { username: existingUsername } = JSON.parse(existingUser);
+      if (existingUsername === username) {
+        alert("Username already exists. Please choose a different username.");
+        return;
+      }
+    }
 
-        if (usernames === username && passwords === password) {
-          setIsAuthenticated(true);
-          localStorage.setItem("isAuthenticated", "true");
-        } else {
-          alert("Invalid credentials");
-        }
+    localStorage.setItem("userdetails", JSON.stringify({ username, password }));
+    alert("Signup successful! Please login.");
   };
+
+
+  const login = (username: string, password: string) => {
+    const details = localStorage.getItem("userdetails");
+    if (!details) {
+      alert("Please signup first.");
+      return;
+    }
+
+    const { username: storedUsername, password: storedPassword } =
+      JSON.parse(details);
+
+    if (username === storedUsername && password === storedPassword) {
+      setIsAuthenticated(true);
+      localStorage.setItem("isAuthenticated", "true");
+    } else {
+      alert("Invalid credentials.");
+    }
+  };
+
 
   const logout = () => {
     setIsAuthenticated(false);
@@ -50,15 +66,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const updateChartData = (interactionType: "counter" | "editor" | "form") => {
-  
     const index = chartLabels.indexOf(
       interactionType.charAt(0).toUpperCase() + interactionType.slice(1)
     );
 
     if (index !== -1) {
-      
       const newData = [...chartData];
-      newData[index] += 1; 
+      newData[index] += 1;
       setChartData(newData);
     }
   };
@@ -69,6 +83,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         isAuthenticated,
         login,
         logout,
+        signup,
         hasUnsavedChanges,
         setHasUnsavedChanges,
         chartData,
