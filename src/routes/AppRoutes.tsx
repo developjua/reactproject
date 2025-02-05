@@ -37,7 +37,7 @@ const AnimatedRoutes: React.FC = () => {
     config: { duration: 300 },
   });
 
-  return transitions((style, item) => (
+  return transitions((style) => (
     <animated.div style={style}>
       <Routes location={stableLocation}>
         <Route path="/login" element={<Login />} />

@@ -1,4 +1,3 @@
-import React from "react";
 import { Container, Grid, Typography, Button } from "@mui/material";
 import { animated, useScroll } from "@react-spring/web";
 import Counter from "../components/Counter";
