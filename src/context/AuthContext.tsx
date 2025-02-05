@@ -21,11 +21,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
   const [chartData, setChartData] = useState<number[]>([0, 0, 0]);
 
-  const [chartLabels, setChartLabels] = useState<string[]>([
-    "Counter",
-    "Editor",
-    "Form",
-  ]);
+ const [chartLabels] = useState<string[]>(["Counter", "Editor", "Form"]);
 
   const signup = (username: string, password: string) => {
     const existingUser = localStorage.getItem("userdetails");
