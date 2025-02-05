@@ -20,6 +20,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
   const [chartData, setChartData] = useState<number[]>([0, 0, 0]);
+
   const [chartLabels, setChartLabels] = useState<string[]>([
     "Counter",
     "Editor",
@@ -40,7 +41,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     alert("Signup successful! Please login.");
   };
 
-
   const login = (username: string, password: string) => {
     const details = localStorage.getItem("userdetails");
     if (!details) {
@@ -58,7 +58,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       alert("Invalid credentials.");
     }
   };
-
 
   const logout = () => {
     setIsAuthenticated(false);

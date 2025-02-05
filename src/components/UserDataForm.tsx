@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   TextField,
   Button,
   Container,
   Box,
   Typography,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import { useAuth } from "../context/AuthContext";
 
 const UserDataForm: React.FC = () => {
-  const { hasUnsavedChanges, setHasUnsavedChanges, updateChartData } = useAuth();
+  const { setHasUnsavedChanges, updateChartData } = useAuth();
   
   const [formData, setFormData] = useState({
     name: "",

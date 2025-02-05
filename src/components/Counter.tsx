@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 
 const Counter: React.FC = () => {
   const [count, setCount] = useState<number>(0);
-   const { hasUnsavedChanges, setHasUnsavedChanges, updateChartData } = useAuth();
+   const { setHasUnsavedChanges, updateChartData } = useAuth();
 
   const increment = () => {
     setCount((prevCount) => prevCount + 1);

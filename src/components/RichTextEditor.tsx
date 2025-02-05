@@ -7,8 +7,7 @@ import { useAuth } from "../context/AuthContext";
 const RichTextEditor: React.FC = () => {
   const [content, setContent] = useState<string>("");
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
-  const { hasUnsavedChanges, setHasUnsavedChanges, updateChartData } =
-    useAuth();
+  const { setHasUnsavedChanges, updateChartData } = useAuth();
   const quillRef = useRef<ReactQuill | null>(null);
 
   useEffect(() => {
@@ -28,7 +27,7 @@ const RichTextEditor: React.FC = () => {
   const handleSave = () => {
     if (typeof window !== "undefined" && window.localStorage) {
       localStorage.setItem("richTextContent", content);
-      setOpenSnackbar(true); // Show Snackbar when content is saved
+      setOpenSnackbar(true);
       setHasUnsavedChanges(false);
       updateChartData("editor");
     }
@@ -39,7 +38,7 @@ const RichTextEditor: React.FC = () => {
     if (typeof window !== "undefined" && window.localStorage) {
       localStorage.removeItem("richTextContent");
     }
-    setOpenSnackbar(true); // Show Snackbar when content is cleared
+    setOpenSnackbar(true); 
   };
 
   const handleCloseSnackbar = () => {
@@ -78,17 +77,10 @@ const RichTextEditor: React.FC = () => {
             "image",
           ]}
           placeholder="Write something amazing..."
-          sx={{
-            ".ql-container": {
-              border: "1px solid #ccc",
-              borderRadius: "30px",
-              mt: 4,
-            },
-            ".ql-editor": {
-              minHeight: "500px",
-              fontSize: "16px",
-              padding: "16px",
-            },
+          style={{
+            border: "1px solid #ccc",
+            borderRadius: "30px",
+            marginTop: "16px",
           }}
         />
         <Box
@@ -112,7 +104,6 @@ const RichTextEditor: React.FC = () => {
           </Button>
         </Box>
 
-        
         <Snackbar
           open={openSnackbar}
           autoHideDuration={3000}
@@ -125,4 +116,3 @@ const RichTextEditor: React.FC = () => {
 };
 
 export default RichTextEditor;
-
